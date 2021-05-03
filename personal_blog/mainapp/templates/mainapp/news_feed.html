@@ -1,7 +1,22 @@
 {% extends 'mainapp/base.html' %}
 {% block content %}
+    <span>_________________________________________________________________</span><br>
+    <span>Не прочитанные</span><br>
+    <span>_________________________________________________________________</span><br>
     {% for post in newsfeed %}
-        <h1>{{ post.title }}</h1>
+        <h1><a href="{% url 'mainapp:post' post.id %}"> {{ post.title }}</a></h1>
+        <div class="post-meta">
+            <time datetime="2019-04-01">{{ post.created }}</time>
+            <span class="author">{{ post.blog }}</span>
+        </div>
+        <p>{{ post.content }}</p>
+        <a href="{% url 'mainapp:mark_post' post.id %}">Пометить прочитанным</a><br>
+    {% endfor %}
+    <span>_________________________________________________________________</span><br>
+    <span>Прочитанные</span><br>
+    <span>_________________________________________________________________</span><br>
+    {% for post in viewed %}
+        <h1><a href="{% url 'mainapp:post' post.id %}"> {{ post.title }}</a></h1>
         <div class="post-meta">
             <time datetime="2019-04-01">{{ post.created }}</time>
             <span class="author">{{ post.blog }}</span>

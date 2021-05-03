@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from authapp.models import User
 from mainapp.forms import PostCreationForm
-from mainapp.models import PersonalPage, PostItem
+from mainapp.models import PersonalPage, PostItem, ViewedPosts
 
 
 @login_required
@@ -22,9 +22,18 @@ def news_feed(request):
     personal_profile = PersonalPage.objects.get(owner=request.user)
     tracking_blogs = personal_profile.get_news_feed()
     context = {
-        'newsfeed': tracking_blogs,
+        'newsfeed': tracking_blogs['new_posts'],
+        'viewed': tracking_blogs['viewed_posts'],
     }
     return render(request, 'mainapp/news_feed.html', context)
+
+
+def post_content(request, post_id):
+    post = PostItem.objects.get(id=post_id)
+    context = {
+        'post': post,
+    }
+    return render(request, 'mainapp/post.html', context)
 
 
 def users_list(request):
@@ -68,3 +77,9 @@ def create_new_post(request):
 def delete_post(request, post_id):
     PostItem.objects.get(id=post_id).delete()
     return HttpResponseRedirect(reverse('mainapp:index'))
+
+
+def mark_post_as_read(request, post_id):
+    post = PostItem.objects.get(id=post_id)
+    ViewedPosts.mark_as_read(request.user, post)
+    return HttpResponseRedirect(reverse('mainapp:news_feed'))
