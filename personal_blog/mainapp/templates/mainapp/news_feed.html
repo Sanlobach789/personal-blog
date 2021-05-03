@@ -1,13 +1,11 @@
 {% extends 'mainapp/base.html' %}
 {% block content %}
-    <a href="{% url 'mainapp:new_post' %}">Создать пост</a>
-    {% for post in self_posts %}
+    {% for post in newsfeed %}
         <h1>{{ post.title }}</h1>
         <div class="post-meta">
             <time datetime="2019-04-01">{{ post.created }}</time>
             <span class="author">{{ post.blog }}</span>
         </div>
         <p>{{ post.content }}</p>
-        <a href="{% url 'mainapp:delete_post' post.id %}">Удалить</a>
     {% endfor %}
 {% endblock %}

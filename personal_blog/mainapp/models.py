@@ -14,17 +14,27 @@ class PersonalPage(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     tracking_blogs = models.ManyToManyField(User, related_name='followed_blogs')
 
-    def get_self_posts(self):
-        pass
-
-    def get_news_feed(self):
-        posts = PostItem.objects.filter(blog__owner__in=self.tracking_blogs.values('id'))
-        print(posts)
-        return posts
-
     def __str__(self):
         return f'{self.name}'
 
+    def get_self_posts(self):
+        posts = PostItem.objects.filter(blog=self.id)
+        return posts
+
+    def get_news_feed(self):
+        posts = PostItem.objects.filter(blog__owner__in=self.tracking_blogs.values('id')).order_by('-created')
+        return posts
+
+    def show_users(self):
+        untracked_users = User.objects.exclude(id__in=self.tracking_blogs.all()).exclude(id=self.owner_id)
+        tracking_users = self.tracking_blogs.all()
+        return {'untracked_users': untracked_users, 'tracking_users': tracking_users}
+
+    def subscribe(self):
+        pass
+
+    def unsubscribe(self):
+        pass
 
 @transaction.atomic
 @receiver(post_save, sender=User)

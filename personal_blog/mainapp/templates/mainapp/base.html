@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Title
+        {% endblock %}
+    </title>
+    <link href="{% static "css/style.css" %}" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <div id="sidebar">
+        <ul>
+            <li><a href="{% url 'mainapp:index' %}">Мой блог</a></li>
+            <li><a href="{% url 'mainapp:news_feed' %}">Новости</a></li>
+            <li><a href="{% url 'mainapp:blogs' %}">Пользователи</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'authapp:logout' %}">Sign Out</a></li>
+            {% else %}
+                <li><a href="{% url 'authapp:login' %}">Sign In</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="main-content">
+        <a href="#" data-toggle=".container" id="sidebar-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

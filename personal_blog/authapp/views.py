@@ -15,7 +15,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('main'))
+                return HttpResponseRedirect(reverse('mainapp:index'))
     else:
         form = UserLoginForm()
     context = {'form': form}
@@ -24,4 +24,4 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect(reverse('main'))
+    return HttpResponseRedirect(reverse('mainapp:index'))

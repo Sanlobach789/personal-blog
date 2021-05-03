@@ -1,0 +1,9 @@
+{% extends 'mainapp/base.html' %}
+{% block content %}
+    <form class="form-horizontal" action="{% url 'mainapp:new_post' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <input class="form-control" type="submit" value="Сохранить">
+    </form>
+{% endblock %}

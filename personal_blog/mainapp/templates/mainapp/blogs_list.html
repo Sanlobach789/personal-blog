@@ -1,0 +1,21 @@
+{% extends 'mainapp/base.html' %}
+{% block content %}
+    <span>_________________________________________________________________</span><br>
+    <span>Не подписан</span><br>
+    <span>_________________________________________________________________</span><br>
+    {% for blog in untracked_users %}
+        <h1>{{ blog }}</h1>
+        <div class="post-meta">
+            <a href="{% url 'mainapp:subscribe' blog.id %}">Подписаться</a>
+        </div>
+    {% endfor %}
+    <span>_________________________________________________________________</span><br>
+    <span>Подписан</span><br>
+    <span>_________________________________________________________________</span><br>
+    {% for blog in tracking_users %}
+        <h1>{{ blog }}</h1>
+        <div class="post-meta">
+            <a href="{% url 'mainapp:unsubscribe' blog.id %}">Отписаться</a>
+        </div>
+    {% endfor %}
+{% endblock %}
