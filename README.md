@@ -5,4 +5,4 @@ Application for creating of personal blog
 Будет запущена сборка.
 При завершении будет создан тестовый пользователь, данные для аутентификации
 логин: testadmin
-пароль: password
+пароль: adminpassword
