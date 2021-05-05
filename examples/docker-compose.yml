@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:13.1
+    privileged: true
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: sanlobach
+      POSTGRES_PASSWORD: personalblog789
+      POSTGRES_DB: blogs
+  backend:
+    build:
+      context: .
+    volumes:
+      - static_vol:/static
+    expose:
+      - 8080
+    command: bash -c "
+      ./wait-for-postgres.sh db
+      && python manage.py migrate
+      && gunicorn personal_blog.wsgi -b 0.0.0.0:8080
+      && python manage.py collectstatic
+      && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('testadmin', 'testadmin@myproject.com', 'password')" | python manage.py shell
+      "
+    depends_on:
+      - db
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_vol:/static
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
+
+volumes:
+  static_vol:
